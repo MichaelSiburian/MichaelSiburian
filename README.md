@@ -1,4 +1,5 @@
-## Hi there 👋
+## Hello World I'm Michael Siburian 👋
+![Michael Siburian](img/me.png)
 
 <!--
 **MichaelSiburian/MichaelSiburian** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
@@ -14,3 +15,9 @@ Here are some ideas to get you started:
 - 😄 Pronouns: ...
 - ⚡ Fun fact: ...
 -->
+
+
+- 🌱 I learned programming from [**Sandhika Galih**](UCkXmLjEr95LVtGuIm3l2dPg) and i learned investment📈 from [**Timothy Ronald**](UCXMB8OiiSnq2B4xLgUtTYhw) and [**kalimasada**](UCe9_rJjMmQS5C_LobUZ_pHg).
+
+
+![**Always Grow Up**](https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3aDNhdmU2ZXY2NDV1ajZsbDc0OG5wcjUweDVtaGJiOXhhZnlvbmZoMiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/BfZNAFsCEClzG1dkqX/giphy.gif)
