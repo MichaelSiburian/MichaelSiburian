@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>michaelsiburian's Biliard</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: #222;
+        }
+
+        canvas {
+            display: block;
+            margin: 20px auto;
+            border: 3px solid #555;
+        }
+
+        .ui {
+            position: fixed;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+            color: white;
+            font-family: Arial;
+        }
+
+        button {
+            background: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="gameCanvas" width="800" height="400"></canvas>
+    <div class="ui">
+        <button id="rematch">Rematch</button>
+        <div>Power: <span id="power">0</span>%</div>
+    </div>
+
+    <script>
+        // Game Engine
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        let isDragging = false;
+        let power = 0;
+
+        // Bola putih
+        const whiteBall = {
+            x: 200, y: 200, r: 15,
+            vx: 0, vy: 0,
+            color: 'white'
+        };
+
+        // Bola target
+        const balls = [
+            { x: 500, y: 200, r: 15, color: 'red', vx: 0, vy: 0 }
+        ];
+
+        // Event Listeners
+        canvas.addEventListener('mousedown', startDrag);
+        canvas.addEventListener('mousemove', dragCue);
+        canvas.addEventListener('mouseup', shoot);
+        document.getElementById('rematch').addEventListener('click', resetGame);
+
+        function startDrag(e) {
+            const rect = canvas.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+
+            // Cek klik di bola putih
+            const dist = Math.sqrt((mouseX - whiteBall.x) ** 2 + (mouseY - whiteBall.y) ** 2);
+            if (dist < whiteBall.r) isDragging = true;
+        }
+
+        function dragCue(e) {
+            if (!isDragging) return;
+
+            const rect = canvas.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+
+            // Hitung power
+            power = Math.min(
+                Math.sqrt((mouseX - whiteBall.x) ** 2 + (mouseY - whiteBall.y) ** 2),
+                100
+            );
+            document.getElementById('power').textContent = Math.floor(power);
+        }
+
+        function shoot() {
+            if (!isDragging) return;
+            isDragging = false;
+
+            // Terapkan gaya
+            const angle = Math.atan2(
+                whiteBall.y - (whiteBall.x + power),
+                whiteBall.x - (whiteBall.y + power)
+            );
+            whiteBall.vx = Math.cos(angle) * power * 0.1;
+            whiteBall.vy = Math.sin(angle) * power * 0.1;
+        }
+
+        function resetGame() {
+            whiteBall.x = 200; whiteBall.y = 200;
+            balls[0].x = 500; balls[0].y = 200;
+            power = 0;
+        }
+
+        function gameLoop() {
+            // Update physics
+            whiteBall.x += whiteBall.vx;
+            whiteBall.y += whiteBall.vy;
+
+            // Render
+            ctx.fillStyle = '#0a5c36';
+            ctx.fillRect(0, 0, 800, 400);
+
+            // Gambar bola
+            [whiteBall, ...balls].forEach(ball => {
+                ctx.beginPath();
+                ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);
+                ctx.fillStyle = ball.color;
+                ctx.fill();
+                ctx.stroke();
+            });
+
+            // Gambar cue stick
+            if (isDragging) {
+                ctx.beginPath();
+                ctx.moveTo(whiteBall.x, whiteBall.y);
+                ctx.lineTo(
+                    whiteBall.x - (whiteBall.x + power) / 2,
+                    whiteBall.y - (whiteBall.y + power) / 2
+                );
+                ctx.strokeStyle = 'brown';
+                ctx.lineWidth = 3;
+                ctx.stroke();
+            }
+
+            requestAnimationFrame(gameLoop);
+        }
+
+        gameLoop();
+    </script>
+</body>
+
+</html>
